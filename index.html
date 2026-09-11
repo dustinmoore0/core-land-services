@@ -3,37 +3,265 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Core Land Services — veteran owned property services in King George, Virginia.">
   <title>Core Land Services</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #ffffff;
-    }
-    body {
-      overflow-x: auto;
-    }
-    .site-image {
-      display: block;
-      width: 1024px;
-      height: 1536px;
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: #fff; }
+    body { margin: 0; background: #fff; font-family: Arial, Helvetica, sans-serif; }
+
+    .site {
+      position: relative;
+      width: min(1024px, 100vw);
+      aspect-ratio: 2 / 3;
       margin: 0 auto;
     }
-    @media (max-width: 1024px) {
-      .site-image {
-        width: 100%;
-        height: auto;
-      }
+
+    .site-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .hotspot, .anchor-target, .form-control, .file-hotspot, .submit-hotspot {
+      position: absolute;
+    }
+
+    .hotspot {
+      display: block;
+      background: transparent;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .hotspot:focus-visible,
+    .file-hotspot:focus-visible,
+    .submit-hotspot:focus-visible,
+    .form-control:focus-visible {
+      outline: 3px solid #f4c542;
+      outline-offset: 2px;
+    }
+
+    .anchor-target {
+      left: 0;
+      width: 1px;
+      height: 1px;
+      pointer-events: none;
+    }
+
+    /* Quote form overlays. These replace the non-interactive form drawn in the image. */
+    .form-control {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 0;
+      border-radius: 3px;
+      padding: 0 7px;
+      background: rgba(255,255,255,.985);
+      color: #222;
+      font: 400 clamp(7px, 0.82vw, 11px)/1.2 Arial, Helvetica, sans-serif;
+      z-index: 4;
+    }
+
+    textarea.form-control {
+      padding-top: 6px;
+      resize: none;
+    }
+
+    select.form-control {
+      padding-right: 20px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #303030 50%),
+        linear-gradient(135deg, #303030 50%, transparent 50%);
+      background-position:
+        calc(100% - 10px) 50%,
+        calc(100% - 6px) 50%;
+      background-size: 4px 4px, 4px 4px;
+      background-repeat: no-repeat;
+    }
+
+    .file-hotspot,
+    .submit-hotspot {
+      z-index: 5;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      color: transparent;
+      overflow: hidden;
+    }
+
+    #photo { display: none; }
+
+    /* Section anchors */
+    #home { top: 0%; }
+    #services { top: 39.9%; }
+    #about { top: 60.2%; }
+    #gallery { top: 73.6%; }
+    #service-areas { top: 81.5%; }
+    #contact { top: 81.5%; }
+
+    /* Header */
+    .logo-top { left: 3.1%; top: 1.7%; width: 25.8%; height: 5.7%; }
+    .nav-home { left: 33.6%; top: 3.2%; width: 4.4%; height: 2.2%; }
+    .nav-services { left: 38.2%; top: 3.2%; width: 5.4%; height: 2.2%; }
+    .nav-about { left: 44.2%; top: 3.2%; width: 4.7%; height: 2.2%; }
+    .nav-gallery { left: 49.7%; top: 3.2%; width: 4.7%; height: 2.2%; }
+    .nav-areas { left: 55.1%; top: 3.2%; width: 8.1%; height: 2.2%; }
+    .nav-contact { left: 63.9%; top: 3.2%; width: 6.1%; height: 2.2%; }
+    .phone-top { left: 78.2%; top: 1.9%; width: 18.5%; height: 2.7%; }
+    .quote-top { left: 78.8%; top: 4.35%; width: 17.5%; height: 2.65%; }
+
+    /* Hero */
+    .quote-hero { left: 3.9%; top: 27.45%; width: 18.4%; height: 3.0%; }
+    .phone-hero { left: 22.9%; top: 27.45%; width: 16.7%; height: 3.0%; }
+
+    /* Service cards */
+    .service-stump { left: 3.4%; top: 46.3%; width: 18.2%; height: 13.1%; }
+    .service-tree { left: 22.4%; top: 46.3%; width: 18.0%; height: 13.1%; }
+    .service-hauling { left: 41.0%; top: 46.3%; width: 18.3%; height: 13.1%; }
+    .service-mowing { left: 60.0%; top: 46.3%; width: 18.2%; height: 13.1%; }
+    .service-landscape { left: 78.8%; top: 46.3%; width: 18.0%; height: 13.1%; }
+
+    /* Mid-page CTAs */
+    .about-button { left: 20.1%; top: 70.55%; width: 17.0%; height: 2.45%; }
+    .gallery-button { left: 89.0%; top: 76.35%; width: 9.8%; height: 2.6%; }
+    .areas-button { left: 7.2%; top: 87.65%; width: 17.0%; height: 2.65%; }
+
+    /* Quote form */
+    #quote-name { left: 65.9%; top: 84.93%; width: 15.2%; height: 1.55%; }
+    #quote-phone { left: 81.55%; top: 84.93%; width: 15.0%; height: 1.55%; }
+    #quote-email { left: 65.9%; top: 86.72%; width: 15.2%; height: 1.55%; }
+    #quote-service { left: 81.55%; top: 86.72%; width: 15.0%; height: 1.55%; }
+    #quote-message { left: 65.9%; top: 88.52%; width: 30.65%; height: 2.72%; }
+    .file-hotspot { left: 65.9%; top: 91.33%; width: 16.3%; height: 2.05%; }
+    .submit-hotspot { left: 82.4%; top: 91.33%; width: 14.15%; height: 2.05%; }
+
+    /* Footer */
+    .logo-footer { left: 3.8%; top: 94.45%; width: 19.7%; height: 4.2%; }
+    .footer-home { left: 29.8%; top: 94.55%; width: 3.7%; height: 1.6%; }
+    .footer-services { left: 33.7%; top: 94.55%; width: 5.0%; height: 1.6%; }
+    .footer-about { left: 39.1%; top: 94.55%; width: 4.0%; height: 1.6%; }
+    .footer-gallery { left: 43.6%; top: 94.55%; width: 4.4%; height: 1.6%; }
+    .footer-areas { left: 48.4%; top: 94.55%; width: 7.6%; height: 1.6%; }
+    .footer-contact { left: 56.0%; top: 94.55%; width: 5.0%; height: 1.6%; }
+    .phone-footer { left: 37.4%; top: 96.1%; width: 12.2%; height: 1.9%; }
+
+    @media (max-width: 600px) {
+      .form-control { padding-left: 3px; padding-right: 3px; }
+      textarea.form-control { padding-top: 2px; }
     }
   </style>
 </head>
 <body>
-  <img
-    class="site-image"
-    src="core-land-services-homepage.png"
-    width="1024"
-    height="1536"
-    alt="Core Land Services website"
-  >
+  <main class="site" aria-label="Core Land Services home page">
+    <img class="site-image" src="assets/core-land-services-homepage.png" width="1024" height="1536" alt="Core Land Services website">
+
+    <span id="home" class="anchor-target"></span>
+    <span id="services" class="anchor-target"></span>
+    <span id="about" class="anchor-target"></span>
+    <span id="gallery" class="anchor-target"></span>
+    <span id="service-areas" class="anchor-target"></span>
+    <span id="contact" class="anchor-target"></span>
+
+    <a class="hotspot logo-top" href="#home" aria-label="Core Land Services home"></a>
+    <a class="hotspot nav-home" href="#home" aria-label="Home"></a>
+    <a class="hotspot nav-services" href="#services" aria-label="Services"></a>
+    <a class="hotspot nav-about" href="#about" aria-label="About"></a>
+    <a class="hotspot nav-gallery" href="#gallery" aria-label="Gallery"></a>
+    <a class="hotspot nav-areas" href="#service-areas" aria-label="Service Areas"></a>
+    <a class="hotspot nav-contact" href="#contact" aria-label="Contact"></a>
+    <a class="hotspot phone-top" href="tel:+14439456869" aria-label="Call Core Land Services at 443-945-6869"></a>
+    <a class="hotspot quote-top" href="#contact" aria-label="Get a free quote"></a>
+
+    <a class="hotspot quote-hero" href="#contact" aria-label="Get a free quote"></a>
+    <a class="hotspot phone-hero" href="tel:+14439456869" aria-label="Call Core Land Services at 443-945-6869"></a>
+
+    <a class="hotspot service-stump" href="#contact" data-service="Stump Grinding" aria-label="Request a quote for stump grinding"></a>
+    <a class="hotspot service-tree" href="#contact" data-service="Small Tree Removal" aria-label="Request a quote for small tree removal"></a>
+    <a class="hotspot service-hauling" href="#contact" data-service="Brush & Debris Hauling" aria-label="Request a quote for brush and debris hauling"></a>
+    <a class="hotspot service-mowing" href="#contact" data-service="Lawn Mowing" aria-label="Request a quote for lawn mowing"></a>
+    <a class="hotspot service-landscape" href="#contact" data-service="Landscaping & Property Cleanup" aria-label="Request a quote for landscaping and property cleanup"></a>
+
+    <a class="hotspot about-button" href="#about" aria-label="Learn more about Core Land Services"></a>
+    <a class="hotspot gallery-button" href="#gallery" aria-label="View full gallery"></a>
+    <a class="hotspot areas-button" href="#service-areas" aria-label="View all service areas"></a>
+
+    <form id="quote-form" aria-label="Request a free quote">
+      <input class="form-control" id="quote-name" name="name" type="text" placeholder="Name *" autocomplete="name" required aria-label="Name">
+      <input class="form-control" id="quote-phone" name="phone" type="tel" placeholder="Phone *" autocomplete="tel" required aria-label="Phone">
+      <input class="form-control" id="quote-email" name="email" type="email" placeholder="Email" autocomplete="email" aria-label="Email">
+      <select class="form-control" id="quote-service" name="service" aria-label="Service needed">
+        <option value="">Service Needed</option>
+        <option>Stump Grinding</option>
+        <option>Small Tree Removal</option>
+        <option>Brush & Debris Hauling</option>
+        <option>Lawn Mowing</option>
+        <option>Landscaping & Property Cleanup</option>
+        <option>Other</option>
+      </select>
+      <textarea class="form-control" id="quote-message" name="message" placeholder="Message (optional)" aria-label="Message"></textarea>
+      <input id="photo" name="photo" type="file" accept="image/*" aria-label="Choose a photo to attach">
+      <label class="file-hotspot" for="photo" tabindex="0" aria-label="Attach photos">Attach Photos</label>
+      <button class="submit-hotspot" type="submit" aria-label="Request a quote">Request a Quote</button>
+    </form>
+
+    <a class="hotspot logo-footer" href="#home" aria-label="Core Land Services home"></a>
+    <a class="hotspot footer-home" href="#home" aria-label="Home"></a>
+    <a class="hotspot footer-services" href="#services" aria-label="Services"></a>
+    <a class="hotspot footer-about" href="#about" aria-label="About"></a>
+    <a class="hotspot footer-gallery" href="#gallery" aria-label="Gallery"></a>
+    <a class="hotspot footer-areas" href="#service-areas" aria-label="Service Areas"></a>
+    <a class="hotspot footer-contact" href="#contact" aria-label="Contact"></a>
+    <a class="hotspot phone-footer" href="tel:+14439456869" aria-label="Call Core Land Services at 443-945-6869"></a>
+  </main>
+
+  <script>
+    const serviceSelect = document.getElementById('quote-service');
+
+    document.querySelectorAll('[data-service]').forEach((link) => {
+      link.addEventListener('click', () => {
+        serviceSelect.value = link.dataset.service;
+      });
+    });
+
+    const fileLabel = document.querySelector('.file-hotspot');
+    fileLabel.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        document.getElementById('photo').click();
+      }
+    });
+
+    document.getElementById('quote-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById('quote-name').value.trim();
+      const phone = document.getElementById('quote-phone').value.trim();
+      const email = document.getElementById('quote-email').value.trim();
+      const service = serviceSelect.value || 'Not specified';
+      const message = document.getElementById('quote-message').value.trim();
+      const photo = document.getElementById('photo').files[0];
+
+      const subject = `Free Quote Request - ${service}`;
+      const lines = [
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Email: ${email || 'Not provided'}`,
+        `Service: ${service}`,
+        '',
+        'Message:',
+        message || 'No message provided.'
+      ];
+
+      if (photo) {
+        lines.push('', `Photo selected: ${photo.name}`, 'Please attach this photo to the email before sending.');
+      }
+
+      const mailto = `mailto:Corelandservices1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+      window.location.href = mailto;
+    });
+  </script>
 </body>
 </html>
