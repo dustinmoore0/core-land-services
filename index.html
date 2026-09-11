@@ -188,7 +188,12 @@
     <a class="hotspot gallery-button" href="#gallery" aria-label="View full gallery"></a>
     <a class="hotspot areas-button" href="#service-areas" aria-label="View all service areas"></a>
 
-    <form id="quote-form" aria-label="Request a free quote">
+    <form id="quote-form" action="https://formsubmit.co/Corelandservices1@gmail.com" method="POST" enctype="multipart/form-data" aria-label="Request a free quote">
+      <input type="hidden" name="_subject" value="New Core Land Services Quote Request">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://corelandservicesva.com/thanks.html">
+      <input type="hidden" name="_url" value="https://corelandservicesva.com/">
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
       <input class="form-control" id="quote-name" name="name" type="text" placeholder="Name *" autocomplete="name" required aria-label="Name">
       <input class="form-control" id="quote-phone" name="phone" type="tel" placeholder="Phone *" autocomplete="tel" required aria-label="Phone">
       <input class="form-control" id="quote-email" name="email" type="email" placeholder="Email" autocomplete="email" aria-label="Email">
@@ -202,7 +207,7 @@
         <option>Other</option>
       </select>
       <textarea class="form-control" id="quote-message" name="message" placeholder="Message (optional)" aria-label="Message"></textarea>
-      <input id="photo" name="photo" type="file" accept="image/*" aria-label="Choose a photo to attach">
+      <input id="photo" name="attachment" type="file" accept="image/*" aria-label="Choose a photo to attach">
       <label class="file-hotspot" for="photo" tabindex="0" aria-label="Attach photos">Attach Photos</label>
       <button class="submit-hotspot" type="submit" aria-label="Request a quote">Request a Quote</button>
     </form>
@@ -234,34 +239,9 @@
       }
     });
 
-    document.getElementById('quote-form').addEventListener('submit', (event) => {
-      event.preventDefault();
+    // The form now submits directly through FormSubmit.
+    // Visitors remain in the browser and are returned to our thank-you page.
 
-      const name = document.getElementById('quote-name').value.trim();
-      const phone = document.getElementById('quote-phone').value.trim();
-      const email = document.getElementById('quote-email').value.trim();
-      const service = serviceSelect.value || 'Not specified';
-      const message = document.getElementById('quote-message').value.trim();
-      const photo = document.getElementById('photo').files[0];
-
-      const subject = `Free Quote Request - ${service}`;
-      const lines = [
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        `Email: ${email || 'Not provided'}`,
-        `Service: ${service}`,
-        '',
-        'Message:',
-        message || 'No message provided.'
-      ];
-
-      if (photo) {
-        lines.push('', `Photo selected: ${photo.name}`, 'Please attach this photo to the email before sending.');
-      }
-
-      const mailto = `mailto:Corelandservices1@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
-      window.location.href = mailto;
-    });
   </script>
 </body>
 </html>

@@ -1,15 +1,11 @@
-CORE LAND SERVICES — CLICKABLE WEBSITE
+CORE LAND SERVICES — DIRECT QUOTE FORM
 
-This build preserves the approved full-page design image and adds real interactive controls on top of it.
+This version sends quote requests through FormSubmit instead of opening the visitor's email app.
+Destination: Corelandservices1@gmail.com
 
-Working interactions:
-- Header and footer navigation
-- All phone-number buttons (tel:443-945-6869)
-- Get a Free Quote buttons
-- Service cards, which jump to the quote form and preselect the service
-- Quote form fields and service dropdown
-- Request a Quote, which opens an email to Corelandservices1@gmail.com with the form details filled in
-- Attach Photos opens the device's file picker. Because this is a static website, the selected photo must be attached manually in the email window before sending.
+IMPORTANT FIRST-TIME SETUP:
+After the first test submission, FormSubmit will send an activation email to Corelandservices1@gmail.com.
+Open that email and click the activation/confirmation link once. After activation, future quote requests will be emailed directly.
 
-UPLOAD:
-Upload index.html and the assets folder together, preserving the folder structure.
+The form supports name, phone, email, service, message, and one image attachment.
+After submission, visitors return to https://corelandservicesva.com/thanks.html.
